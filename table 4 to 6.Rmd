@@ -1,0 +1,25 @@
+---
+title: "Table 4 -> Table 6"
+author: "Han Nguyen"
+date: "February 25, 2018"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+raw <- read_csv("rawdata.csv")
+
+raw
+
+raw.tidy <- raw %>% gather(key = "Income", value = "frequency", -religion)
+
+raw.tidy
+
+raw.tidy2 <- raw.tidy %>% arrange(religion)
+
+raw.tidy2
+```

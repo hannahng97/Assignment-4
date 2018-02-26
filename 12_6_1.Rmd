@@ -1,0 +1,67 @@
+---
+title: "12.6.1"
+author: "Han Nguyen"
+date: "February 25, 2018"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(tidyr)
+who
+
+who1 <- who %>% 
+  gather(new_sp_m014:newrel_f65, key = "key", value = "cases", na.rm = TRUE)
+who1
+
+who1 %>% 
+  count(key)
+
+who2 <- who1 %>% 
+  mutate(key = stringr::str_replace(key, "newrel", "new_rel"))
+who2
+
+who3 <- who2 %>% 
+  separate(key, c("new", "type", "sexage"), sep = "_")
+who3
+
+who3 %>% 
+  count(new)
+
+who4 <- who3 %>% 
+  select(-new, -iso2, -iso3)
+
+who5 <- who4 %>% 
+  separate(sexage, c("sex", "age"), sep = 1)
+who5
+```
+
+#### Question 3
+I claimed that \texttt{iso2} and \texttt{iso3} were redundant with \texttt{country}. Confirm this claim.
+
+```{r}
+select(who3, country, iso2, iso3) %>%
+  distinct() %>%
+  group_by(country) %>%
+  filter(n() > 1)
+```
+Since this returns 0 distinct tibbles and groups, it shows that iso2 and iso3 are redundant with country.
+
+
+#### Question 4
+For each country, year, and sex compute the total number of cases of TB. Make an informative visualisation of the data.
+
+```{r}
+who5 %>%
+  group_by(country, year, sex) %>%
+  filter(year > 1995) %>%
+  summarise(cases = sum(cases)) %>%
+  unite(country_sex, country, sex, remove = FALSE) %>%
+  ggplot(aes(x = year, y = cases, group = country_sex, colour = sex)) +
+  geom_line()
+```
+Countries were combined with sex because there were so many countries that a ggplot would not represent each one well. 

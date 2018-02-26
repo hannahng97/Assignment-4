@@ -1,0 +1,19 @@
+---
+title: '10.5'
+author: "Han Nguyen"
+date: "February 25, 2018"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#### Question 5
+What does \texttt{tibble::enframe()} do? When might you use it?
+
+```{r}
+?tibble::enframe
+```
+
+It converts vectors to a data frame with its names and values, so you would use it when you need to convert vectors to two column data frames. 
